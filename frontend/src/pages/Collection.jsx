@@ -73,7 +73,7 @@ const Collection = () => {
 
   useEffect(()=>{
     applyFilter()
-  },[category,subCategory,search,showSearch,visible])
+  },[category,subCategory,search,showSearch,visible,products])
 
   useEffect(()=>{
     sortProduct()

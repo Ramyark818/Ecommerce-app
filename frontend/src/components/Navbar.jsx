@@ -7,7 +7,15 @@ import { ShopContext } from '../context/ShopContext'
 const Navbar = () => {
   const [visible,setVisible]=useState(false)
 
-  const {setShowSearch,getCartCount}=useContext(ShopContext)
+  const {setShowSearch,getCartCount,navigate,token,setToken,setCartItems}=useContext(ShopContext)
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken('');
+    setCartItems({});
+    navigate('/login');
+  }
+
   return (
     <div className='flex justify-between items-center py-4 font-medium'>
       <Link to={'/'}>
@@ -39,16 +47,20 @@ const Navbar = () => {
         <div className='flex items-center gap-6'>
           <img onClick={()=>setShowSearch(true)} src={assets.search_icon} className='w-5 cursor-pointer'alt='search'/>
           <div className='group relative'>
-            <Link to={'/login'}>
-              <img className='w-5 cursor-pointer' src={assets.profile_icon} alt='profile'/>
-            </Link>
+            {/* <Link to={'/login'}> */}
+
+              <img onClick={()=>token?null:navigate('/login')} className='w-5 cursor-pointer' src={assets.profile_icon} alt='profile'/>
+            {/* </Link> */}
+            {/* Dropdown Menu */}
+            {token && 
             <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
               <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded'>
                 <p className='cursor-pointer hover:text-black'>My Profile</p>
-                <p className='cursor-pointer hover:text-black'>Orders</p>
-                <p className='cursor-pointer hover:text-black'>Logout</p>
+                <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'>Orders</p>
+                <p onClick={handleLogout} className='cursor-pointer hover:text-black'>Logout</p>
               </div>
             </div>
+            }
           </div>
           <Link to='/cart' className='relative'>
             <img src={assets.cart_icon} alt='cart' className='w-5 min-w-5 cursor-pointer'/>
